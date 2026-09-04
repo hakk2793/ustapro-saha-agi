@@ -1,0 +1,2205 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#0b0f14">
+<title>UstaPro Saha Ağı — FINAL</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://unpkg.com/@tonconnect/ui@3.0.0/dist/tonconnect-ui.min.js"></script>
+
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#0b0f14;
+  --card:#121820;
+  --card2:#18212b;
+  --line:#263340;
+  --text:#f4f7fa;
+  --muted:#8e9aa7;
+  --accent:#ff9f1c;
+  --accent2:#ffb84d;
+  --green:#29d391;
+  --red:#ff5f56;
+  --blue:#4da3ff;
+}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text)}
+body{
+  min-height:100vh;
+  font-family:Arial,Helvetica,sans-serif;
+  padding-bottom:84px;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}
+
+.header{
+  padding:17px 16px 12px;
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(11,15,20,.96);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.brand{font-size:21px;font-weight:900}
+.subtitle{color:var(--muted);font-size:12px;margin-top:4px}
+.status{
+  margin-top:10px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-size:11px;
+  color:var(--muted);
+}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.dot.ok{background:var(--green)}
+.dot.error{background:var(--red)}
+
+.container{max-width:760px;margin:auto;padding:14px}
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:15px;
+  margin-bottom:13px;
+}
+.profile{display:flex;align-items:center;gap:12px}
+.avatar,.chat-avatar{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  font-weight:900;
+  flex:none;
+}
+.avatar{
+  width:50px;height:50px;
+  background:linear-gradient(135deg,#ff9f1c,#ff6b00);
+  color:#111;
+  font-size:19px;
+}
+.profile-name{font-weight:800}
+.profile-type{color:var(--accent2);font-size:12px;margin-top:3px}
+.points{margin-left:auto;text-align:right}
+.points b{color:var(--accent);font-size:18px}
+.points span{display:block;color:var(--muted);font-size:10px}
+
+.progress{
+  height:7px;
+  background:#26303a;
+  border-radius:10px;
+  overflow:hidden;
+  margin-top:2px;
+}
+.progress div{
+  height:100%;
+  width:75%;
+  background:linear-gradient(90deg,var(--accent),#ffd166);
+}
+.progress-text{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:5px;
+}
+
+.hero{
+  padding:20px;
+  background:linear-gradient(135deg,#171e27,#11161d);
+}
+.hero h1{margin:0 0 7px;font-size:23px}
+.hero p{color:var(--muted);line-height:1.5;font-size:13px;margin:0 0 15px}
+
+.btn{
+  border:0;
+  border-radius:11px;
+  padding:11px 14px;
+  font-weight:800;
+  color:#111;
+  background:var(--accent);
+}
+.btn.full{width:100%}
+.btn.secondary{
+  color:var(--text);
+  background:var(--card2);
+  border:1px solid var(--line);
+}
+.btn.green{color:#08150f;background:var(--green)}
+.btn.blue{color:#fff;background:var(--blue)}
+.btn.danger{color:#fff;background:var(--red)}
+
+.menu{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+.menu button{
+  min-height:76px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--card);
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+}
+.menu .ico{font-size:23px}
+.menu small{font-size:10px}
+
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:20px 2px 10px;
+}
+.section-title h2{font-size:16px;margin:0}
+.section-title span{color:var(--muted);font-size:11px}
+
+.categories{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:9px;
+}
+.cat{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+  color:var(--text);
+  text-align:left;
+}
+.cat:active,.tool:active,.menu button:active{transform:scale(.98)}
+.cat strong{display:block;font-size:14px}
+.cat small{display:block;color:var(--muted);margin-top:5px;font-size:10px}
+.cat-icon{font-size:25px;margin-bottom:8px}
+
+.search{display:flex;gap:7px;margin-bottom:10px}
+input,select,textarea{
+  width:100%;
+  background:#0e141b;
+  border:1px solid var(--line);
+  color:var(--text);
+  border-radius:11px;
+  padding:12px;
+  outline:none;
+}
+textarea{min-height:100px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+
+.filters{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  padding-bottom:5px;
+  scrollbar-width:none;
+}
+.filters::-webkit-scrollbar{display:none}
+.filters button{
+  flex:0 0 auto;
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--muted);
+  padding:9px 12px;
+  border-radius:20px;
+  font-size:11px;
+}
+.filters button.active{
+  background:var(--accent);
+  color:#111;
+  border-color:var(--accent);
+  font-weight:bold;
+}
+
+.job{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:15px;
+  margin-bottom:10px;
+}
+.job-top{display:flex;justify-content:space-between;gap:10px}
+.job-title{font-size:15px;font-weight:800}
+.job-type{
+  display:inline-block;
+  margin-top:7px;
+  background:#242d37;
+  color:var(--accent2);
+  border-radius:7px;
+  padding:4px 7px;
+  font-size:9px;
+}
+.job-location{color:var(--muted);font-size:11px;margin-top:9px}
+.job-desc{color:#bac3cc;font-size:12px;line-height:1.45;margin-top:8px}
+.job-budget{
+  color:var(--green);
+  font-weight:bold;
+  white-space:nowrap;
+  font-size:12px;
+}
+.job-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}
+.job-actions button{
+  border:1px solid var(--line);
+  background:var(--card2);
+  color:var(--text);
+  padding:9px 5px;
+  border-radius:9px;
+  font-size:11px;
+}
+
+.empty{text-align:center;color:var(--muted);padding:30px 10px}
+.page{display:none}
+.page.active{display:block}
+
+.tools{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+.tool{
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--text);
+  border-radius:13px;
+  padding:13px 6px;
+  text-align:center;
+}
+.tool b{display:block;font-size:20px;margin-bottom:6px}
+.tool span{font-size:10px}
+
+.chat{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:13px 0;
+  border-bottom:1px solid var(--line);
+  cursor:pointer;
+}
+.chat:last-child{border-bottom:0}
+.chat-avatar{width:42px;height:42px;background:#293542}
+.chat-info{flex:1;min-width:0}
+.chat-info b{font-size:13px}
+.chat-info small{
+  display:block;
+  color:var(--muted);
+  margin-top:4px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:30;
+  background:rgba(14,19,25,.98);
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:center;
+}
+.bottom-inner{
+  width:100%;
+  max-width:760px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+}
+.bottom button{
+  border:0;
+  background:none;
+  color:var(--muted);
+  padding:11px 5px;
+  font-size:10px;
+}
+.bottom button.active{color:var(--accent)}
+.bottom button b{display:block;font-size:19px;margin-bottom:3px}
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:none;
+  background:rgba(0,0,0,.72);
+  align-items:flex-end;
+}
+.modal.show{display:flex}
+.modal-box{
+  width:100%;
+  max-height:92vh;
+  overflow:auto;
+  background:#111820;
+  border-radius:22px 22px 0 0;
+  padding:18px;
+  border-top:1px solid var(--line);
+}
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+}
+.modal-head h3{margin:0}
+.close{
+  width:34px;height:34px;
+  border:0;border-radius:50%;
+  background:var(--card2);
+  color:white;font-size:20px;
+}
+.form-group{margin-bottom:11px}
+.form-group label{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-bottom:6px;
+}
+.subcats{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:7px;
+  margin-top:9px;
+}
+.subcat{
+  border:1px solid var(--line);
+  background:var(--card2);
+  color:#dce3e9;
+  padding:10px 7px;
+  border-radius:9px;
+  font-size:10px;
+}
+.detail-row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:9px 0;
+  border-bottom:1px solid var(--line);
+  font-size:12px;
+}
+.detail-row span:first-child{color:var(--muted)}
+.badge{
+  padding:4px 7px;
+  border-radius:6px;
+  background:#26333e;
+  color:var(--accent2);
+  font-size:9px;
+}
+.payment{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+.payment button{
+  padding:17px 8px;
+  border:1px solid var(--line);
+  background:var(--card2);
+  color:var(--text);
+  border-radius:13px;
+}
+.payment b{display:block;font-size:18px;margin-bottom:5px}
+.payment .btn{min-height:56px}
+#ton-connect{margin-top:10px;min-height:44px}
+.wallet-status{font-size:11px;color:var(--muted);margin-top:8px;word-break:break-all}
+.pro-pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#24313c;color:var(--accent2);font-size:10px;font-weight:800}
+.note{color:var(--muted);font-size:10px;line-height:1.5;margin-top:10px}
+
+.message-list{
+  height:300px;
+  overflow:auto;
+  background:#0b1015;
+  border-radius:12px;
+  padding:10px;
+  margin-bottom:10px;
+}
+.message-row{margin-bottom:8px}
+.message-row.mine{text-align:right}
+.message-bubble{
+  display:inline-block;
+  max-width:85%;
+  padding:8px 10px;
+  border-radius:10px;
+  font-size:12px;
+  overflow-wrap:anywhere;
+}
+.message-row.mine .message-bubble{
+  background:var(--accent);
+  color:#111;
+}
+.message-row:not(.mine) .message-bubble{
+  background:#202b35;
+  color:#fff;
+}
+.chat-input{
+  display:flex;
+  gap:7px;
+}
+.chat-input input{min-width:0}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:82px;
+  transform:translateX(-50%) translateY(20px);
+  background:#f1f4f7;
+  color:#111;
+  padding:11px 15px;
+  border-radius:12px;
+  font-size:12px;
+  font-weight:bold;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:300;
+  max-width:90%;
+  text-align:center;
+}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+.spinner{
+  display:inline-block;
+  width:12px;height:12px;
+  border:2px solid #555;
+  border-top-color:var(--accent);
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:430px){
+  .menu{grid-template-columns:repeat(2,1fr)}
+  .tools{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="brand">👷 UstaPro Saha Ağı</div>
+  <div class="subtitle">Saha hesabı • İş ağı • Ustalar • Teklif</div>
+  <div class="status">
+    <span class="dot" id="statusDot"></span>
+    <span id="firebaseStatus">Firebase bağlanıyor...</span>
+  </div>
+</header>
+
+<main class="container">
+
+<section id="homePage" class="page active">
+
+  <div class="card profile">
+    <div class="avatar" id="avatar">A</div>
+    <div>
+      <div class="profile-name" id="profileName">Acode Test</div>
+      <div class="profile-type">🏅 BAŞLANGIÇ USTASI</div>
+    </div>
+    <div class="points">
+      <b id="pointText">750</b>
+      <span>UstaPuan</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="progress"><div></div></div>
+    <div class="progress-text">
+      <span>30 Gün PRO Ödülü</span>
+      <span id="progressText">750 / 1000</span>
+    </div>
+  </div>
+
+  <div class="card hero">
+    <h1>UstaPro'yu indir 🚀</h1>
+    <p>Metraj, maliyet, GPS alan ölçümü, teklif hazırlama ve daha fazlası. Saha işlerini tek yerde yönet.</p>
+    <button class="btn full" onclick="openPlayStore()">📲 UstaPro'yu İndir</button>
+  </div>
+
+  <div class="menu">
+    <button onclick="showPage('jobsPage')">
+      <span class="ico">📋</span><small>İş İlanları</small>
+    </button>
+    <button onclick="openJobModal()">
+      <span class="ico">➕</span><small>İş İlanı Ver</small>
+    </button>
+    <button onclick="showPage('chatsPage')">
+      <span class="ico">💬</span><small>Sohbetler</small>
+    </button>
+    <button onclick="showPage('profilePage')">
+      <span class="ico">👤</span><small>Profilim</small>
+    </button>
+  </div>
+
+  <div class="section-title">
+    <h2>İş Kategorileri</h2>
+    <span>Ne iş yapıyorsun?</span>
+  </div>
+  <div class="categories" id="categoryGrid"></div>
+
+  <div class="section-title">
+    <h2>Son İşler</h2>
+    <span onclick="showPage('jobsPage')">Tümünü gör →</span>
+  </div>
+  <div id="homeJobs"></div>
+
+  <div class="section-title">
+    <h2>Saha Araçları</h2>
+    <span>UstaPro</span>
+  </div>
+
+  <div class="tools">
+    <button class="tool" onclick="toolMsg('Metraj')"><b>📐</b><span>Metraj</span></button>
+    <button class="tool" onclick="toolMsg('Beton')"><b>🧱</b><span>Beton</span></button>
+    <button class="tool" onclick="toolMsg('Boya')"><b>🎨</b><span>Boya</span></button>
+    <button class="tool" onclick="toolMsg('AR Metre')"><b>📱</b><span>AR Metre</span></button>
+    <button class="tool" onclick="toolMsg('GPS Alan')"><b>📍</b><span>GPS Alan</span></button>
+    <button class="tool" onclick="toolMsg('Teklif PDF')"><b>📄</b><span>Teklif PDF</span></button>
+    <button class="tool" onclick="toolMsg('Alan Döşeme')"><b>⬛</b><span>Alan Döşeme</span></button>
+    <button class="tool" onclick="toolMsg('Maliyet')"><b>💰</b><span>Maliyet</span></button>
+    <button class="tool" onclick="toolMsg('Nokta')"><b>📌</b><span>Nokta</span></button>
+  </div>
+
+</section>
+
+<section id="jobsPage" class="page">
+  <div class="section-title">
+    <h2>📋 İş İlanları</h2>
+    <span id="jobCount">0 iş</span>
+  </div>
+
+  <div class="search">
+    <input id="jobSearch" placeholder="🔎 İş, usta, konum ara..." oninput="renderJobs()">
+    <button class="btn" onclick="openJobModal()">＋</button>
+  </div>
+
+  <div class="filters" id="mainFilters"></div>
+
+  <div id="subFilterWrap" style="display:none;margin-top:8px">
+    <div class="filters" id="subFilters"></div>
+  </div>
+
+  <div id="jobsList"></div>
+</section>
+
+<section id="chatsPage" class="page">
+  <div class="section-title">
+    <h2>💬 Sohbetler</h2>
+    <span>İş bağlantıları</span>
+  </div>
+  <div class="card">
+    <div id="chatList">
+      <div class="empty">Sohbetler yükleniyor...</div>
+    </div>
+  </div>
+</section>
+
+<section id="profilePage" class="page">
+  <div class="section-title">
+    <h2>👤 Profilim</h2>
+  </div>
+
+  <div class="card profile">
+    <div class="avatar" id="profileAvatar">A</div>
+    <div>
+      <div class="profile-name" id="profileName2">Acode Test</div>
+      <div class="profile-type">BAŞLANGIÇ USTASI</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="detail-row"><span>Kullanıcı ID</span><b id="userIdText">-</b></div>
+    <div class="detail-row"><span>Kullanıcı adı</span><b id="usernameText">-</b></div>
+    <div class="detail-row"><span>UstaPuan</span><b style="color:var(--accent)" id="profilePoints">750</b></div>
+    <div class="detail-row"><span>Hesap</span><span class="badge" id="accountBadge">ÜCRETSİZ</span></div>
+    <div class="detail-row"><span>Firebase</span><b id="firebaseUidText">-</b></div>
+    <div class="detail-row"><span>TON cüzdan</span><b id="walletAddressText">Bağlı değil</b></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">⭐ PRO Üyelik</h3>
+    <p class="note">Daha fazla görünürlük, PRO rozet, gelişmiş saha araçları ve özel özellikler.</p>
+    <button class="btn full" onclick="openPaymentModal()">🚀 PRO'ya Geç</button>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">👥 Arkadaşını Davet Et</h3>
+    <p class="note">UstaPro Saha Ağı'nı ustalara gönder.</p>
+    <button class="btn secondary full" onclick="shareReferral()">📤 Davet Linkini Paylaş</button>
+  </div>
+</section>
+
+</main>
+
+<nav class="bottom">
+  <div class="bottom-inner">
+    <button onclick="showPage('homePage')" id="navHome" class="active"><b>🏠</b>Ana Sayfa</button>
+    <button onclick="showPage('jobsPage')" id="navJobs"><b>📋</b>İşler</button>
+    <button onclick="showPage('chatsPage')" id="navChats"><b>💬</b>Sohbet</button>
+    <button onclick="showPage('profilePage')" id="navProfile"><b>👤</b>Profil</button>
+  </div>
+</nav>
+
+<!-- İLAN MODAL -->
+<div class="modal" id="jobModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>➕ İş İlanı Ver</h3>
+      <button class="close" onclick="closeModal('jobModal')">×</button>
+    </div>
+
+    <div class="form-group">
+      <label>İş başlığı</label>
+      <input id="jobTitle" placeholder="Örn: 500 m² Kilit Parke Döşeme">
+    </div>
+
+    <div class="form-group">
+      <label>Ana kategori</label>
+      <select id="jobCategory" onchange="loadJobSubcategories()"></select>
+    </div>
+
+    <div class="form-group">
+      <label>İş bölümü</label>
+      <select id="jobType"></select>
+    </div>
+
+    <div class="form-group">
+      <label>Şehir / İlçe</label>
+      <input id="jobLocation" placeholder="Örn: Mersin / Erdemli">
+    </div>
+
+    <div class="form-group">
+      <label>İş miktarı</label>
+      <input id="jobAmount" placeholder="Örn: 800 m²">
+    </div>
+
+    <div class="form-group">
+      <label>Bütçe</label>
+      <input id="jobBudget" placeholder="Örn: 80.000 TL">
+    </div>
+
+    <div class="form-group">
+      <label>Açıklama</label>
+      <textarea id="jobDescription" placeholder="İşin detaylarını yaz..."></textarea>
+    </div>
+
+    <button class="btn full" id="publishJobBtn" onclick="createJob()">🚀 İlanı Yayınla</button>
+  </div>
+</div>
+
+<!-- KATEGORİ MODAL -->
+<div class="modal" id="categoryModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="categoryModalTitle">Kategori</h3>
+      <button class="close" onclick="closeModal('categoryModal')">×</button>
+    </div>
+    <div id="categorySubList" class="subcats"></div>
+  </div>
+</div>
+
+<!-- DETAY MODAL -->
+<div class="modal" id="detailModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>📋 İş Detayı</h3>
+      <button class="close" onclick="closeModal('detailModal')">×</button>
+    </div>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<!-- PRO / SATIN ALMA -->
+<div class="modal" id="paymentModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>🚀 UstaPro PRO</h3>
+      <button class="close" onclick="closeModal('paymentModal')">×</button>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">⭐ 30 Gün PRO</h3>
+      <p class="note">Ücretsiz hesap iş ilanları ve sohbeti kullanabilir. PRO; gelişmiş saha araçlarını ve PRO görünürlüğünü açar.</p>
+      <div class="detail-row"><span>Süre</span><b>30 gün</b></div>
+      <div class="detail-row"><span>Telegram Stars</span><b id="proStarsPrice">100 ⭐</b></div>
+      <div class="detail-row"><span>TON</span><b id="proTonPrice">0.25 TON</b></div>
+      <div class="detail-row"><span>Hesap</span><b id="paymentUserName">-</b></div>
+    </div>
+
+    <button class="btn full" id="starsPayBtn" onclick="startStarsPayment()">⭐ Telegram Stars ile PRO Al</button>
+
+    <div class="card" style="margin-top:10px;margin-bottom:0">
+      <h3 style="margin-top:0">💎 TON ile Öde</h3>
+      <div id="ton-connect"></div>
+      <div id="walletStatus" class="wallet-status">Cüzdan bağlı değil.</div>
+      <button class="btn green full" style="margin-top:10px" onclick="payWithTon()">💎 TON ile PRO Al</button>
+      <button class="btn secondary full" style="margin-top:8px" onclick="disconnectTonWallet()">Cüzdanı Ayır</button>
+    </div>
+
+    <button class="btn secondary full" style="margin-top:10px" onclick="openPlayStore()">📲 Uygulamadan PRO Al</button>
+    <p class="note">Stars ödemesi Telegram botu üzerinden faturalandırılır. TON ödemesinde cüzdan işlemi imzalar; PRO yalnızca sunucu doğrulamasından sonra açılmalıdır.</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- USTAPRO SAHA AĞI FINAL WEB APP -->
+<script type="module">
+
+/* =========================================================
+   FIREBASE
+   ========================================================= */
+
+import {initializeApp} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import {getAuth, signInAnonymously} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  doc,
+  setDoc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  onSnapshot,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+const firebaseConfig={
+  apiKey:"AIzaSyB-M3PknO-bKHk3fH3jS-xYgXSYz5F-tY",
+  authDomain:"usta-pro-ec5fc.firebaseapp.com",
+  projectId:"usta-pro-ec5fc",
+  storageBucket:"usta-pro-ec5fc.firebasestorage.app",
+  messagingSenderId:"782881364619",
+  appId:"1:782881364619:web:4add307b2fbdb2d147528e",
+  measurementId:"G-FQ7HPFQ9M2"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const auth=getAuth(app);
+let firebaseUid="";
+
+const firebaseStatus=document.getElementById("firebaseStatus");
+const statusDot=document.getElementById("statusDot");
+
+function setFirebaseStatus(text,type="ok"){
+  firebaseStatus.textContent=text;
+  statusDot.className="dot "+(type==="ok"?"ok":type==="error"?"error":"");
+}
+
+setFirebaseStatus("Firebase bağlantısı hazır","ok");
+
+
+/* =========================================================
+   TELEGRAM
+   ========================================================= */
+
+const TG=window.Telegram?.WebApp||null;
+
+if(TG){
+  try{
+    TG.ready();
+    TG.expand();
+    TG.setHeaderColor?.("#0b0f14");
+    TG.setBackgroundColor?.("#0b0f14");
+  }catch(e){
+    console.warn("Telegram WebApp:",e);
+  }
+}
+
+
+/* =========================================================
+   KULLANICI
+   ========================================================= */
+
+const ACODE_USER={
+  id:"ACODE_TEST_001",
+  firstName:"Acode",
+  lastName:"Test",
+  username:"acode_test",
+  source:"acode"
+};
+
+let currentUser=null;
+let allJobs=[];
+let currentCategory="Tümü";
+let currentSubCategory="Tümü";
+let unsubscribeJobs=null;
+let unsubscribeMessages=null;
+
+async function loadUser(){
+  if(TG?.initDataUnsafe?.user){
+    const u=TG.initDataUnsafe.user;
+    currentUser={
+      id:String(u.id),
+      firstName:u.first_name||"Telegram",
+      lastName:u.last_name||"",
+      username:u.username||"",
+      source:"telegram"
+    };
+  }else{
+    currentUser={...ACODE_USER};
+  }
+
+  firebaseUid=auth.currentUser?.uid||"";
+
+  const name=`${currentUser.firstName} ${currentUser.lastName}`.trim();
+  document.getElementById("profileName").textContent=name;
+  document.getElementById("profileName2").textContent=name;
+  const initials=(currentUser.firstName?.[0]||"U").toUpperCase();
+  document.getElementById("avatar").textContent=initials;
+  document.getElementById("profileAvatar").textContent=initials;
+  document.getElementById("userIdText").textContent=currentUser.id;
+  document.getElementById("usernameText").textContent=currentUser.username ? "@"+currentUser.username : "-";
+  const uidEl=document.getElementById("firebaseUidText");
+  if(uidEl)uidEl.textContent=firebaseUid||"-";
+  await saveUser();
+}
+
+async function saveUser(){
+  if(!currentUser||!firebaseUid)return;
+  try{
+    const ref=doc(db,"kullanicilar",firebaseUid);
+    const snap=await getDoc(ref);
+    if(!snap.exists()){
+      await setDoc(ref,{
+        firebaseUid, telegramId:currentUser.id, firstName:currentUser.firstName,
+        lastName:currentUser.lastName, username:currentUser.username,
+        points:750, accountType:"free", isPro:false, proUntil:null,
+        createdAt:serverTimestamp(), updatedAt:serverTimestamp()
+      });
+      updatePoints(750);
+    }else{
+      const data=snap.data();
+      await setDoc(ref,{telegramId:currentUser.id,firstName:currentUser.firstName,lastName:currentUser.lastName,username:currentUser.username,updatedAt:serverTimestamp()},{merge:true});
+      currentUser.isPro=Boolean(data.isPro) && (!data.proUntil || data.proUntil.toMillis?.()>Date.now() || Number(data.proUntil)>Date.now());
+      currentUser.proUntil=data.proUntil||null;
+      updatePoints(data.points??750);
+    }
+    await setDoc(doc(db,"kullanici_esleme",currentUser.id),{telegramId:currentUser.id,firebaseUid,username:currentUser.username||"",updatedAt:serverTimestamp()},{merge:true});
+    applyAccountUI();
+  }catch(e){
+    console.error("Kullanıcı:",e);
+    toast("⚠️ Kullanıcı bilgisi okunamadı: "+friendlyFirebaseError(e));
+  }
+}
+
+function applyAccountUI(){
+  const pro=Boolean(currentUser?.isPro);
+  const badge=document.getElementById("accountBadge");
+  if(badge){badge.textContent=pro?"PRO":"ÜCRETSİZ";badge.style.color=pro?"var(--green)":"";}
+  document.querySelectorAll(".profile-type").forEach(el=>el.textContent=pro?"PRO ÜYE":"BAŞLANGIÇ USTASI");
+}
+
+
+function updatePoints(points){
+  const value=Number(points)||0;
+
+  document.getElementById("pointText").textContent=value;
+  document.getElementById("profilePoints").textContent=value;
+  document.getElementById("progressText").textContent=`${value} / 1000`;
+
+  const progress=document.querySelector(".progress div");
+  if(progress){
+    progress.style.width=Math.min(100,(value/1000)*100)+"%";
+  }
+}
+
+
+/* =========================================================
+   KATEGORİLER
+   ========================================================= */
+
+const JOB_CATEGORIES={
+  "İnşaat":[
+    "Kaba İnşaat","İnce İnşaat","Tuğla Örme","Gazbeton",
+    "Kalıp","Demir","Duvar","Taş Duvar","İstinat Duvarı",
+    "Betonarme","Temel","Kolon","Kiriş","Döşeme"
+  ],
+
+  "Zemin":[
+    "Kilit Parke","Bordür","Beton","Asfalt","Şap",
+    "Zemin Tesviyesi","Hafriyat","Dolgu","Stabilize Serme",
+    "Doğal Taş","Granit","Mermer","Traverten","Epoksi Zemin"
+  ],
+
+  "Tadilat":[
+    "Sıva","Alçı","Alçıpan","Boya","Seramik","Fayans",
+    "Mantolama","Çatı","Çatı İzolasyonu","Su Yalıtımı",
+    "Isı Yalıtımı","Asma Tavan","Duvar Kağıdı"
+  ],
+
+  "Peyzaj":[
+    "Çim","Rulo Çim","Tohum Çim","Peyzaj","Ağaç Dikimi",
+    "Budama","Sulama Sistemi","Damlama Sulama",
+    "Otomatik Sulama","Bahçe Düzenleme","Havuz Çevresi",
+    "Bahçe Duvarı","Bahçe Kapısı","Bitkilendirme"
+  ],
+
+  "Elektrik":[
+    "Elektrik Tesisatı","Aydınlatma","Pano","Kablo Çekimi",
+    "Priz Anahtar","Kamera/Güvenlik","Güneş Enerjisi",
+    "Yangın Sistemi","Jeneratör"
+  ],
+
+  "Tesisat":[
+    "Su Tesisatı","Sıhhi Tesisat","Kanalizasyon","Doğalgaz",
+    "Klima","Havalandırma","Yangın Tesisatı","Pompa","Hidrofor"
+  ],
+
+  "Makine":[
+    "Mini Ekskavatör","JCB","Kepçe","Bobcat","Silindir",
+    "Vinç","Kamyon","Hafriyat Kamyonu","Beton Pompası",
+    "Transmikser","Forklift","Manitou","Greyder","Loder"
+  ],
+
+  "Usta Hizmetleri":[
+    "Duvar Ustası","Kalıpçı","Demirci","Sıvacı","Boyacı",
+    "Fayansçı","Elektrikçi","Tesisatçı","Çatı Ustası",
+    "Kaynakçı","Marangoz","Alüminyum","PVC","Cam",
+    "Kapı/Pencere","Mobilya Montajı","Dekorasyon"
+  ]
+};
+
+const CATEGORY_ICONS={
+  "İnşaat":"🏗️",
+  "Zemin":"🧱",
+  "Tadilat":"🔨",
+  "Peyzaj":"🌳",
+  "Elektrik":"⚡",
+  "Tesisat":"🚰",
+  "Makine":"🚜",
+  "Usta Hizmetleri":"👷"
+};
+
+function renderCategories(){
+  const box=document.getElementById("categoryGrid");
+  box.innerHTML="";
+
+  Object.keys(JOB_CATEGORIES).forEach(category=>{
+    const btn=document.createElement("button");
+    btn.className="cat";
+
+    btn.innerHTML=`
+      <div class="cat-icon">${CATEGORY_ICONS[category]}</div>
+      <strong>${escapeHtml(category)}</strong>
+      <small>${JOB_CATEGORIES[category].length} hizmet türü</small>
+    `;
+
+    btn.onclick=()=>openCategory(category);
+    box.appendChild(btn);
+  });
+}
+
+function openCategory(category){
+  document.getElementById("categoryModalTitle").textContent=
+    `${CATEGORY_ICONS[category]} ${category}`;
+
+  const box=document.getElementById("categorySubList");
+  box.innerHTML="";
+
+  JOB_CATEGORIES[category].forEach(sub=>{
+    const btn=document.createElement("button");
+    btn.className="subcat";
+    btn.textContent=sub;
+
+    btn.onclick=()=>{
+      currentCategory=category;
+      currentSubCategory=sub;
+
+      closeModal("categoryModal");
+      showPage("jobsPage");
+
+      renderMainFilters();
+      renderSubFilters();
+      renderJobs();
+    };
+
+    box.appendChild(btn);
+  });
+
+  showModal("categoryModal");
+}
+
+
+/* =========================================================
+   FİLTRELER
+   ========================================================= */
+
+function renderMainFilters(){
+  const box=document.getElementById("mainFilters");
+  box.innerHTML="";
+
+  ["Tümü",...Object.keys(JOB_CATEGORIES)].forEach(category=>{
+    const btn=document.createElement("button");
+
+    btn.textContent=category;
+    btn.className=currentCategory===category?"active":"";
+
+    btn.onclick=()=>{
+      currentCategory=category;
+      currentSubCategory="Tümü";
+
+      renderMainFilters();
+      renderSubFilters();
+      renderJobs();
+    };
+
+    box.appendChild(btn);
+  });
+}
+
+function renderSubFilters(){
+  const wrap=document.getElementById("subFilterWrap");
+  const box=document.getElementById("subFilters");
+
+  box.innerHTML="";
+
+  if(currentCategory==="Tümü"){
+    wrap.style.display="none";
+    return;
+  }
+
+  wrap.style.display="block";
+
+  ["Tümü",...JOB_CATEGORIES[currentCategory]].forEach(sub=>{
+    const btn=document.createElement("button");
+
+    btn.textContent=sub;
+    btn.className=currentSubCategory===sub?"active":"";
+
+    btn.onclick=()=>{
+      currentSubCategory=sub;
+      renderSubFilters();
+      renderJobs();
+    };
+
+    box.appendChild(btn);
+  });
+}
+
+
+/* =========================================================
+   İŞLER - CANLI FIRESTORE
+   ========================================================= */
+
+function startJobsListener(){
+  if(unsubscribeJobs){
+    unsubscribeJobs();
+    unsubscribeJobs=null;
+  }
+
+  const list=document.getElementById("jobsList");
+
+  try{
+    const q=query(
+      collection(db,"isler"),
+      orderBy("createdAt","desc")
+    );
+
+    unsubscribeJobs=onSnapshot(
+      q,
+      snap=>{
+        allJobs=snap.docs.map(d=>({
+          id:d.id,
+          ...d.data()
+        }));
+
+        renderJobs();
+        renderHomeJobs();
+
+        setFirebaseStatus(`Firebase • ${allJobs.length} ilan`,"ok");
+      },
+      err=>{
+        console.error("Canlı ilan dinleme:",err);
+
+        /* orderBy/createAt indeks veya eski veri problemi varsa
+           normal dinleme ile tekrar dene. */
+        startJobsFallbackListener();
+      }
+    );
+
+  }catch(e){
+    console.error(e);
+    startJobsFallbackListener();
+  }
+}
+
+function startJobsFallbackListener(){
+  if(unsubscribeJobs){
+    unsubscribeJobs();
+    unsubscribeJobs=null;
+  }
+
+  try{
+    unsubscribeJobs=onSnapshot(
+      collection(db,"isler"),
+      snap=>{
+        allJobs=snap.docs.map(d=>({
+          id:d.id,
+          ...d.data()
+        }));
+
+        allJobs.sort((a,b)=>{
+          const ta=a.createdAt?.seconds||0;
+          const tb=b.createdAt?.seconds||0;
+          return tb-ta;
+        });
+
+        renderJobs();
+        renderHomeJobs();
+
+        setFirebaseStatus(`Firebase • ${allJobs.length} ilan`,"ok");
+      },
+      err=>{
+        console.error("Fallback ilan dinleme:",err);
+        allJobs=[];
+        renderJobs();
+        renderHomeJobs();
+        setFirebaseStatus("Firebase okuma hatası","error");
+        toast("❌ İş ilanları okunamadı");
+      }
+    );
+  }catch(e){
+    console.error(e);
+  }
+}
+
+
+/* =========================================================
+   İŞ LİSTESİ
+   ========================================================= */
+
+function renderJobs(){
+  const list=document.getElementById("jobsList");
+
+  const search=
+    (document.getElementById("jobSearch")?.value||"")
+      .toLowerCase()
+      .trim();
+
+  let filtered=[...allJobs];
+
+  if(currentCategory!=="Tümü"){
+    filtered=filtered.filter(job=>
+      job.category===currentCategory ||
+      (!job.category && categoryFromOldJob(job.jobType)===currentCategory)
+    );
+  }
+
+  if(currentSubCategory!=="Tümü"){
+    filtered=filtered.filter(job=>
+      job.jobType===currentSubCategory
+    );
+  }
+
+  if(search){
+    filtered=filtered.filter(job=>{
+      const text=[
+        job.title,
+        job.jobType,
+        job.category,
+        job.location,
+        job.description,
+        job.ownerName,
+        job.ownerUsername
+      ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+      return text.includes(search);
+    });
+  }
+
+  document.getElementById("jobCount").textContent=
+    `${filtered.length} iş`;
+
+  if(!filtered.length){
+    list.innerHTML=`
+      <div class="card empty">
+        🔎 Bu filtreye uygun iş bulunamadı.
+        <br><br>
+        <button class="btn" onclick="openJobModal()">İlk ilanı sen ver</button>
+      </div>
+    `;
+    return;
+  }
+
+  list.innerHTML=filtered.map(jobCard).join("");
+}
+
+function renderHomeJobs(){
+  const box=document.getElementById("homeJobs");
+
+  if(!allJobs.length){
+    box.innerHTML=`
+      <div class="card empty">
+        Henüz ilan yok.<br><br>
+        İlk ilanı sen oluştur.
+      </div>
+    `;
+    return;
+  }
+
+  box.innerHTML=allJobs.slice(0,4).map(jobCard).join("");
+}
+
+function jobCard(job){
+  const favorite=isFavorite(job.id);
+
+  return`
+    <article class="job">
+
+      <div class="job-top">
+        <div>
+          <div class="job-title">
+            ${escapeHtml(job.title||"İş ilanı")}
+          </div>
+
+          <span class="job-type">
+            ${escapeHtml(job.category||categoryFromOldJob(job.jobType)||"Genel")}
+            •
+            ${escapeHtml(job.jobType||"Genel")}
+          </span>
+        </div>
+
+        ${job.budget?`
+          <div class="job-budget">
+            ${escapeHtml(job.budget)}
+          </div>
+        `:""}
+      </div>
+
+      <div class="job-location">
+        📍 ${escapeHtml(job.location||"Konum belirtilmedi")}
+      </div>
+
+      ${job.amount?`
+        <div class="job-location">
+          📐 ${escapeHtml(job.amount)}
+        </div>
+      `:""}
+
+      ${job.description?`
+        <div class="job-desc">
+          ${escapeHtml(job.description)}
+        </div>
+      `:""}
+
+      <div class="job-actions">
+        <button onclick="openJobDetail('${escapeAttr(job.id)}')">
+          📋 Detay
+        </button>
+
+        <button onclick="toggleFavorite('${escapeAttr(job.id)}')">
+          ${favorite?"★":"☆"} Favori
+        </button>
+
+        <button onclick="shareJob('${escapeAttr(job.id)}')">
+          📤 Paylaş
+        </button>
+      </div>
+
+    </article>
+  `;
+}
+
+function categoryFromOldJob(type){
+  if(!type)return"";
+
+  for(const category in JOB_CATEGORIES){
+    if(JOB_CATEGORIES[category].includes(type)){
+      return category;
+    }
+  }
+
+  return"";
+}
+
+
+/* =========================================================
+   İLAN MODAL
+   ========================================================= */
+
+window.loadJobSubcategories=function(){
+  const category=
+    document.getElementById("jobCategory").value;
+
+  const select=
+    document.getElementById("jobType");
+
+  select.innerHTML="";
+
+  const jobs=JOB_CATEGORIES[category]||[];
+
+  jobs.forEach(job=>{
+    const option=document.createElement("option");
+
+    option.value=job;
+    option.textContent=job;
+
+    select.appendChild(option);
+  });
+};
+
+window.openJobModal=function(){
+  const categorySelect=
+    document.getElementById("jobCategory");
+
+  categorySelect.innerHTML="";
+
+  Object.keys(JOB_CATEGORIES).forEach(category=>{
+    const option=document.createElement("option");
+
+    option.value=category;
+    option.textContent=
+      `${CATEGORY_ICONS[category]} ${category}`;
+
+    categorySelect.appendChild(option);
+  });
+
+  categorySelect.value="Zemin";
+  window.loadJobSubcategories();
+
+  showModal("jobModal");
+};
+
+
+/* =========================================================
+   İLAN OLUŞTUR
+   ========================================================= */
+
+window.createJob=async function(){
+
+  if(!currentUser){
+    toast("⚠️ Kullanıcı hazır değil");
+    return;
+  }
+
+  const title=
+    document.getElementById("jobTitle").value.trim();
+
+  const category=
+    document.getElementById("jobCategory").value;
+
+  const jobType=
+    document.getElementById("jobType").value;
+
+  const location=
+    document.getElementById("jobLocation").value.trim();
+
+  const amount=
+    document.getElementById("jobAmount").value.trim();
+
+  const budget=
+    document.getElementById("jobBudget").value.trim();
+
+  const description=
+    document.getElementById("jobDescription").value.trim();
+
+  if(!title){
+    toast("⚠️ İş başlığını yaz dayı");
+    return;
+  }
+
+  if(!location){
+    toast("⚠️ Şehir / ilçe yaz");
+    return;
+  }
+
+  if(!jobType){
+    toast("⚠️ İş bölümünü seç");
+    return;
+  }
+
+  const btn=document.getElementById("publishJobBtn");
+  btn.disabled=true;
+  btn.innerHTML=`<span class="spinner"></span> Yayınlanıyor...`;
+
+  const data={
+    title,
+    category,
+    jobType,
+    location,
+    amount,
+    budget,
+    description,
+
+    ownerId:currentUser.id,
+    ownerUid:firebaseUid,
+    ownerName:`${currentUser.firstName} ${currentUser.lastName}`.trim(),
+    ownerUsername:currentUser.username||"",
+
+    status:"active",
+    isPro:Boolean(currentUser.isPro),
+    createdAt:serverTimestamp()
+  };
+
+  try{
+
+    const ref=await addDoc(
+      collection(db,"isler"),
+      data
+    );
+
+    console.log("İLAN OLUŞTU:",ref.id);
+
+    toast("🚀 İlan başarıyla yayınlandı");
+
+    closeModal("jobModal");
+    clearJobForm();
+
+    currentCategory="Tümü";
+    currentSubCategory="Tümü";
+
+    showPage("jobsPage");
+
+  }catch(e){
+
+    console.error("İLAN HATASI:",e);
+
+    toast("❌ Firebase hata verdi: "+friendlyFirebaseError(e));
+
+  }finally{
+
+    btn.disabled=false;
+    btn.innerHTML="🚀 İlanı Yayınla";
+  }
+};
+
+function clearJobForm(){
+  document.getElementById("jobTitle").value="";
+  document.getElementById("jobLocation").value="";
+  document.getElementById("jobAmount").value="";
+  document.getElementById("jobBudget").value="";
+  document.getElementById("jobDescription").value="";
+}
+
+
+/* =========================================================
+   İŞ DETAYI
+   ========================================================= */
+
+window.openJobDetail=function(id){
+
+  const job=allJobs.find(x=>x.id===id);
+
+  if(!job){
+    toast("İlan bulunamadı");
+    return;
+  }
+
+  const isOwner=job.ownerId===currentUser?.id || job.ownerUid===firebaseUid;
+
+  document.getElementById("detailContent").innerHTML=`
+
+    <div class="card">
+
+      <h2 style="margin-top:0">
+        ${escapeHtml(job.title||"İş")}
+      </h2>
+
+      <span class="job-type">
+        ${escapeHtml(job.category||"Genel")}
+        •
+        ${escapeHtml(job.jobType||"Genel")}
+      </span>
+
+      <div class="detail-row">
+        <span>📍 Konum</span>
+        <b>${escapeHtml(job.location||"-")}</b>
+      </div>
+
+      <div class="detail-row">
+        <span>📐 Miktar</span>
+        <b>${escapeHtml(job.amount||"-")}</b>
+      </div>
+
+      <div class="detail-row">
+        <span>💰 Bütçe</span>
+        <b style="color:var(--green)">
+          ${escapeHtml(job.budget||"-")}
+        </b>
+      </div>
+
+      <div class="detail-row">
+        <span>👷 İlan sahibi</span>
+        <b>${escapeHtml(job.ownerName||"Usta")}</b>
+      </div>
+
+      <div class="job-desc">
+        ${escapeHtml(job.description||"Açıklama yok.")}
+      </div>
+
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+
+      ${
+        isOwner
+        ? `
+          <button class="btn secondary" disabled>
+            👤 Senin İlanın
+          </button>
+        `
+        : `
+          <button class="btn green"
+            onclick="startChat('${escapeAttr(job.ownerId||"")}','${escapeAttr(job.ownerName||"Usta")}')">
+            💬 Sohbet Başlat
+          </button>
+        `
+      }
+
+      <button class="btn secondary"
+        onclick="shareJob('${escapeAttr(job.id)}')">
+        📤 Paylaş
+      </button>
+
+    </div>
+  `;
+
+  showModal("detailModal");
+};
+
+
+/* =========================================================
+   FAVORİLER
+   ========================================================= */
+
+function getFavorites(){
+  try{
+    return JSON.parse(
+      localStorage.getItem("ustapro_favorites")||"[]"
+    );
+  }catch(e){
+    return[];
+  }
+}
+
+function isFavorite(id){
+  return getFavorites().includes(id);
+}
+
+window.toggleFavorite=function(id){
+
+  let fav=getFavorites();
+
+  if(fav.includes(id)){
+    fav=fav.filter(x=>x!==id);
+    toast("⭐ Favoriden çıkarıldı");
+  }else{
+    fav.push(id);
+    toast("⭐ Favorilere eklendi");
+  }
+
+  localStorage.setItem(
+    "ustapro_favorites",
+    JSON.stringify(fav)
+  );
+
+  renderJobs();
+  renderHomeJobs();
+};
+
+
+/* =========================================================
+   SOHBET
+   ========================================================= */
+
+function makeChatId(a,b){
+  return[String(a),String(b)].sort().join("_");
+}
+
+window.startChat=async function(ownerId,ownerName){
+  if(!ownerId){toast("Bu ilanda kullanıcı bilgisi yok");return;}
+  if(ownerId===currentUser.id){toast("Kendi ilanına mesaj gönderemezsin 😄");return;}
+  if(!firebaseUid){toast("Firebase oturumu hazır değil");return;}
+
+  let ownerUid="";
+  try{
+    const mapSnap=await getDoc(doc(db,"kullanici_esleme",String(ownerId)));
+    if(mapSnap.exists()) ownerUid=mapSnap.data().firebaseUid||"";
+  }catch(e){console.warn("Kullanıcı eşleme:",e);}
+  if(!ownerUid){toast("Karşı taraf güvenli sohbet için uygulamayı yeni sürümle bir kez açmalı.");return;}
+
+  const chatId=makeChatId(firebaseUid,ownerUid);
+  try{
+    await setDoc(doc(db,"sohbetler",chatId),{
+      participants:[currentUser.id,ownerId],
+      participantUids:[firebaseUid,ownerUid],
+      participantNames:{[firebaseUid]:`${currentUser.firstName} ${currentUser.lastName}`.trim(),[ownerUid]:ownerName},
+      updatedAt:serverTimestamp()
+    },{merge:true});
+    closeModal("detailModal");
+    openChatWindow(chatId,ownerName);
+  }catch(e){console.error(e);toast("Sohbet oluşturulamadı: "+friendlyFirebaseError(e));}
+};
+
+window.openChatWindow=function(chatId,ownerName){
+
+  document.getElementById("detailContent").innerHTML=`
+
+    <div class="card">
+
+      <h3 style="margin-top:0">
+        💬 ${escapeHtml(ownerName)}
+      </h3>
+
+      <div id="messages" class="message-list">
+        <div class="empty">
+          Mesajlar yükleniyor...
+        </div>
+      </div>
+
+      <div class="chat-input">
+
+        <input
+          id="messageInput"
+          placeholder="Mesaj yaz..."
+          maxlength="2000"
+          onkeydown="if(event.key==='Enter')sendMessage('${escapeAttr(chatId)}')">
+
+        <button
+          class="btn"
+          onclick="sendMessage('${escapeAttr(chatId)}')">
+          Gönder
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  showModal("detailModal");
+  listenMessages(chatId);
+};
+
+function listenMessages(chatId){
+
+  if(unsubscribeMessages){
+    unsubscribeMessages();
+    unsubscribeMessages=null;
+  }
+
+  const box=document.getElementById("messages");
+
+  if(!box)return;
+
+  try{
+
+    const q=query(
+      collection(db,"sohbetler",chatId,"mesajlar"),
+      orderBy("createdAt","asc")
+    );
+
+    unsubscribeMessages=onSnapshot(
+      q,
+      snap=>{
+        box.innerHTML="";
+
+        if(snap.empty){
+          box.innerHTML=`
+            <div class="empty">
+              Henüz mesaj yok.<br>
+              İlk mesajı sen gönder.
+            </div>
+          `;
+          return;
+        }
+
+        snap.docs.forEach(d=>{
+          const m=d.data();
+
+          const mine=
+            m.senderUid===firebaseUid || m.senderId===currentUser.id;
+
+          const row=document.createElement("div");
+          row.className=
+            "message-row "+(mine?"mine":"");
+
+          const bubble=document.createElement("span");
+          bubble.className="message-bubble";
+          bubble.textContent=m.text||"";
+
+          row.appendChild(bubble);
+          box.appendChild(row);
+        });
+
+        box.scrollTop=box.scrollHeight;
+      },
+
+      err=>{
+        console.error(err);
+
+        box.innerHTML=`
+          <div class="empty">
+            Sohbet okunamadı.<br>
+            Firebase sohbet kurallarını kontrol et.
+          </div>
+        `;
+      }
+    );
+
+  }catch(e){
+    console.error(e);
+  }
+}
+
+window.sendMessage=async function(chatId){
+
+  const input=document.getElementById("messageInput");
+
+  if(!input)return;
+
+  const text=input.value.trim();
+
+  if(!text)return;
+
+  if(text.length>2000){
+    toast("⚠️ Mesaj çok uzun");
+    return;
+  }
+
+  input.disabled=true;
+
+  try{
+
+    await addDoc(
+      collection(db,"sohbetler",chatId,"mesajlar"),
+      {
+        text,
+        senderId:currentUser.id,
+        senderUid:firebaseUid,
+        senderName:
+          `${currentUser.firstName} ${currentUser.lastName}`.trim(),
+        createdAt:serverTimestamp()
+      }
+    );
+
+    await setDoc(
+      doc(db,"sohbetler",chatId),
+      {
+        lastMessage:text,
+        updatedAt:serverTimestamp()
+      },
+      {merge:true}
+    );
+
+    input.value="";
+
+  }catch(e){
+
+    console.error(e);
+
+    toast(
+      "Mesaj gönderilemedi: "+
+      friendlyFirebaseError(e)
+    );
+
+  }finally{
+    input.disabled=false;
+    input.focus();
+  }
+};
+
+
+/* =========================================================
+   SOHBETLER
+   ========================================================= */
+
+async function loadChats(){
+  const box=document.getElementById("chatList");
+  box.innerHTML=`<div class="empty"><span class="spinner"></span> Sohbetler yükleniyor...</div>`;
+  if(!firebaseUid){box.innerHTML=`<div class="empty">Firebase oturumu hazır değil.</div>`;return;}
+  try{
+    const q=query(collection(db,"sohbetler"),where("participantUids","array-contains",firebaseUid));
+    const snap=await getDocs(q);
+    const chats=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.updatedAt?.seconds||0)-(a.updatedAt?.seconds||0));
+    if(!chats.length){box.innerHTML=`<div class="empty">Henüz güvenli sohbet yok.<br><br>Bir iş ilanından sohbet başlat.</div>`;return;}
+    box.innerHTML=chats.map(c=>{
+      const otherUid=(c.participantUids||[]).find(id=>id!==firebaseUid)||"";
+      const name=c.participantNames?.[otherUid]||"Usta";
+      return `<div class="chat" role="button" tabindex="0" data-chat-id="${escapeAttr(c.id)}" data-chat-name="${escapeAttr(name)}"><div class="chat-avatar">👷</div><div class="chat-info"><b>${escapeHtml(name)}</b><small>${escapeHtml(c.lastMessage||"Sohbeti aç")}</small></div></div>`;
+    }).join("");
+    box.querySelectorAll(".chat[data-chat-id]").forEach(row=>{
+      const open=()=>openChatWindow(row.dataset.chatId||"",row.dataset.chatName||"Usta");
+      row.addEventListener("click",open);
+      row.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();open();}});
+    });
+  }catch(e){
+    console.error(e);
+    box.innerHTML=`<div class="empty">Sohbetler okunamadı.<br><br>${escapeHtml(friendlyFirebaseError(e))}</div>`;
+  }
+}
+
+
+/* =========================================================
+   PAYLAŞ
+   ========================================================= */
+
+window.shareJob=async function(id){
+
+  const job=allJobs.find(x=>x.id===id);
+
+  if(!job)return;
+
+  const text=
+`👷 UstaPro İş İlanı
+
+${job.title||"İş ilanı"}
+
+📍 ${job.location||"-"}
+🧱 ${job.jobType||"-"}
+📐 ${job.amount||"-"}
+💰 ${job.budget||"-"}
+
+UstaPro Saha Ağı`;
+
+  try{
+
+    if(TG?.switchInlineQuery){
+
+      TG.switchInlineQuery(
+        text,
+        ["users","groups","channels"]
+      );
+
+      return;
+    }
+
+    if(navigator.share){
+
+      await navigator.share({
+        title:"UstaPro İş İlanı",
+        text
+      });
+
+      return;
+    }
+
+    await navigator.clipboard.writeText(text);
+
+    toast("📋 İlan kopyalandı");
+
+  }catch(e){
+    console.warn("Paylaşım:",e);
+  }
+};
+
+window.shareReferral=async function(){
+
+  const link=
+    "https://t.me/USTAPRO_BOT?start=ref_"+
+    currentUser.id;
+
+  const text=
+`👷 UstaPro Saha Ağı
+
+İş bul, iş ilanı ver, ustalarla bağlantı kur.
+
+${link}`;
+
+  try{
+
+    if(navigator.share){
+
+      await navigator.share({
+        title:"UstaPro Saha Ağı",
+        text
+      });
+
+    }else{
+
+      await navigator.clipboard.writeText(text);
+      toast("📋 Davet linki kopyalandı");
+
+    }
+
+  }catch(e){
+    console.warn("Referral paylaşımı:",e);
+  }
+};
+
+
+/* =========================================================
+   PRO / SATIN ALMA
+   ========================================================= */
+const PRO_BOT_USERNAME="USTAPRO_BOT";
+const PRO_STARS=100;
+const PRO_TON=0.25;
+const TON_RECEIVER_ADDRESS=""; // GitHub'a koymadan önce kendi TON alıcı adresini yaz.
+const TON_MANIFEST_URL=(()=>{try{return new URL("tonconnect-manifest.json",location.href).href}catch(e){return ""}})();
+let tonConnectUI=null;
+
+function initTonConnect(){
+  if(!window.TON_CONNECT_UI?.TonConnectUI)return;
+  try{
+    tonConnectUI=new window.TON_CONNECT_UI.TonConnectUI({manifestUrl:TON_MANIFEST_URL,buttonRootId:"ton-connect"});
+    tonConnectUI.onStatusChange(wallet=>{
+      const address=wallet?.account?.address||"";
+      const shown=address?address.slice(0,8)+"…"+address.slice(-8):"Bağlı değil";
+      const ws=document.getElementById("walletStatus"); if(ws)ws.textContent=address?`Bağlı: ${shown}`:"Cüzdan bağlı değil.";
+      const p=document.getElementById("walletAddressText"); if(p)p.textContent=address?shown:"Bağlı değil";
+    });
+  }catch(e){console.warn("TON Connect:",e);}
+}
+
+window.openPaymentModal=function(){
+  const name=`${currentUser?.firstName||""} ${currentUser?.lastName||""}`.trim()||"UstaPro kullanıcısı";
+  const el=document.getElementById("paymentUserName"); if(el)el.textContent=name;
+  document.getElementById("proStarsPrice").textContent=`${PRO_STARS} ⭐`;
+  document.getElementById("proTonPrice").textContent=`${PRO_TON} TON`;
+  showModal("paymentModal");
+  setTimeout(()=>initTonConnect(),50);
+};
+
+window.startStarsPayment=function(){
+  try{
+    if(!currentUser?.id){toast("Telegram kullanıcı bilgisi yok");return;}
+    const start=`pro_30_${encodeURIComponent(currentUser.id)}`;
+    const url=`https://t.me/${PRO_BOT_USERNAME}?start=${start}`;
+    if(TG?.openTelegramLink)TG.openTelegramLink(url);
+    else if(TG?.openLink)TG.openLink(url);
+    else window.open(url,"_blank");
+  }catch(e){console.error(e);toast("❌ Stars ödeme ekranı açılamadı.");}
+};
+
+window.payWithTon=async function(){
+  if(!TON_RECEIVER_ADDRESS){toast("⚠️ TON alıcı adresi henüz ayarlanmadı.");return;}
+  if(!tonConnectUI){initTonConnect();}
+  if(!tonConnectUI){toast("TON Connect yüklenemedi.");return;}
+  try{
+    const tx=await tonConnectUI.sendTransaction({
+      validUntil:Math.floor(Date.now()/1000)+300,
+      network:"-239",
+      messages:[{address:TON_RECEIVER_ADDRESS,amount:String(Math.round(PRO_TON*1e9))}]
+    });
+    await setDoc(doc(db,"odeme_talepleri",crypto.randomUUID()),{
+      firebaseUid,telegramId:currentUser.id,type:"TON",amount:PRO_TON,amountNano:Math.round(PRO_TON*1e9),
+      status:"pending_verification",boc:tx?.boc||"",walletAddress:tonConnectUI.account?.address||"",createdAt:serverTimestamp()
+    });
+    toast("✅ TON işlemi gönderildi. PRO, ağ doğrulamasından sonra açılacak.");
+  }catch(e){console.error("TON ödeme:",e);toast("TON ödeme iptal edildi veya başarısız oldu.");}
+};
+
+window.disconnectTonWallet=async function(){
+  try{if(tonConnectUI)await tonConnectUI.disconnect();}catch(e){console.warn(e);}
+};
+
+
+/* =========================================================
+   ARAÇLAR
+   ========================================================= */
+
+window.toolMsg=function(name){
+  if(!currentUser?.isPro){
+    toast("🔒 Bu saha aracı PRO üyelik istiyor.");
+    openPaymentModal();
+    return;
+  }
+  toast(`📲 ${name} UstaPro uygulamasında açılıyor...`);
+  setTimeout(()=>openPlayStore(),250);
+};
+
+
+/* =========================================================
+   PLAY STORE
+   ========================================================= */
+
+window.openPlayStore=function(){
+
+  const url=
+    "https://play.google.com/store/apps/details?id=com.hakkidayiustapro";
+
+  if(TG?.openLink){
+    TG.openLink(url);
+  }else{
+    window.open(url,"_blank");
+  }
+};
+
+
+/* =========================================================
+   NAVİGASYON
+   ========================================================= */
+
+window.showPage=function(pageId){
+
+  document.querySelectorAll(".page")
+    .forEach(p=>p.classList.remove("active"));
+
+  const page=document.getElementById(pageId);
+
+  if(page){
+    page.classList.add("active");
+  }
+
+  document.querySelectorAll(".bottom button")
+    .forEach(b=>b.classList.remove("active"));
+
+  if(pageId==="homePage"){
+    document.getElementById("navHome").classList.add("active");
+  }
+
+  if(pageId==="jobsPage"){
+
+    document.getElementById("navJobs").classList.add("active");
+
+    renderMainFilters();
+    renderSubFilters();
+    renderJobs();
+  }
+
+  if(pageId==="chatsPage"){
+
+    document.getElementById("navChats").classList.add("active");
+
+    loadChats();
+  }
+
+  if(pageId==="profilePage"){
+    document.getElementById("navProfile").classList.add("active");
+  }
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+};
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+function showModal(id){
+  const el=document.getElementById(id);
+
+  if(el){
+    el.classList.add("show");
+  }
+}
+
+window.closeModal=function(id){
+
+  const el=document.getElementById(id);
+
+  if(el){
+    el.classList.remove("show");
+  }
+
+  if(id==="detailModal" && unsubscribeMessages){
+    unsubscribeMessages();
+    unsubscribeMessages=null;
+  }
+};
+
+
+/* =========================================================
+   YARDIMCI
+   ========================================================= */
+
+function escapeHtml(value){
+
+  return String(value??"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function escapeAttr(value){
+  return escapeHtml(value)
+    .replaceAll("`","&#096;");
+}
+
+function friendlyFirebaseError(error){
+
+  const code=error?.code||"";
+
+  if(code.includes("permission-denied")){
+    return "Firebase izinleri reddetti";
+  }
+
+  if(code.includes("failed-precondition")){
+    return "Firestore sorgusu için indeks gerekebilir";
+  }
+
+  if(code.includes("unavailable")){
+    return "Firebase geçici olarak kullanılamıyor";
+  }
+
+  return error?.message||"Bilinmeyen hata";
+}
+
+let toastTimer;
+
+function toast(message){
+
+  const el=document.getElementById("toast");
+
+  el.textContent=message;
+  el.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer=setTimeout(()=>{
+    el.classList.remove("show");
+  },3000);
+}
+
+window.toast=toast;
+
+
+/* =========================================================
+   MODAL DIŞI TIKLAMA
+   ========================================================= */
+
+document.querySelectorAll(".modal").forEach(modal=>{
+
+  modal.addEventListener("click",e=>{
+
+    if(e.target===modal){
+      modal.classList.remove("show");
+
+      if(modal.id==="detailModal" && unsubscribeMessages){
+        unsubscribeMessages();
+        unsubscribeMessages=null;
+      }
+    }
+
+  });
+
+});
+
+
+/* =========================================================
+   BAŞLAT
+   ========================================================= */
+
+async function init(){
+
+  loadUser();
+
+  renderCategories();
+
+  renderMainFilters();
+  renderSubFilters();
+
+  startJobsListener();
+}
+
+init();
+
+</script>
+</body>
+</html>

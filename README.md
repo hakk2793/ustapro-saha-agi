@@ -1,20 +1,15 @@
-# UstaPro Saha Ağı
+# UstaPro Saha Ağı - PWA Test
 
-GitHub Pages için son yayın paketi.
+Bu paket, mevcut UstaPro Saha Ağı koduna dokunmadan PWA manifesti eklenmiş test sürümüdür.
 
-## Yüklenecek dosyalar
-- `index.html`
-- `tonconnect-manifest.json`
-- `icon-180.png`
-- `firestore.rules` (Firebase Rules kullanıyorsan)
+GitHub Pages kök dizinine şu dosyaları yükleyin:
+- index.html
+- manifest.json
+- icon-192.png
+- icon-512.png
 
-## GitHub Pages
-Repository: `hakk2793/ustapro-saha-agi`
+Test adresi:
+https://hakk2793.github.io/ustapro-saha-agi/
 
-Pages adresi:
-`https://hakk2793.github.io/ustapro-saha-agi/`
-
-TON Connect manifest:
-`https://hakk2793.github.io/ustapro-saha-agi/tonconnect-manifest.json`
-
-`index.html` içindeki TON Connect manifest adresi bu Pages adresine sabitlenmiştir.
+Önce telefonda web uygulamasının çalıştığını doğrulayın.
+Daha sonra PWABuilder ile Android paketleme testi yapılabilir.
